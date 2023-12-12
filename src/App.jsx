@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import './App.css';
 import Navigation from './components/navigation/Navigation';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
@@ -83,13 +83,20 @@ function App() {
   }
 
   const onRouteChange = (routeChange)=>{
-    if(routeChange === 'signout'){
+    if(routeChange === 'signin'){
       isSignedInState(false);
     }else if (routeChange === 'home'){
       isSignedInState(true);
     }
     routeState(routeChange);
   }
+
+  // useEffect(()=>{
+  //   fetch('http://localhost:3001/')
+  //   .then(res => res.json())
+  //   .then(console.log)
+  //   .catch(err=> console.log(err))
+  // })
   
   return (
     <div className="App">
