@@ -17,6 +17,14 @@ function App() {
   const [box,boxState]=useState({});
   const [route, routeState]=useState('signin');
   const [isSignedIn, isSignedInState]=useState(false);
+  const [user,userState]=useState({
+      id: '',
+      name: '',
+      email: '',
+      password: '',
+      entries: 0,
+      joined: new Date()
+  })
 
 
 
