@@ -23,7 +23,7 @@ function App() {
       email: '',
       password: '',
       entries: 0,
-      joined: new Date()
+      joined: ''
   })
 
 
@@ -98,7 +98,16 @@ function App() {
     }
     routeState(routeChange);
   }
-
+  const loadUser=(data) =>{
+    userState({data:{ //in not working add ...user,
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      entries: data.entries,
+      joined: data.joined
+    }})
+  } 
   // useEffect(()=>{
   //   fetch('http://localhost:3001/')
   //   .then(res => res.json())
@@ -113,13 +122,13 @@ function App() {
       { route === 'home' 
         ?  <div> 
             <Logo />
-            <Rank />
+            <Rank name = {user.name} entries={user.entries}/>
             <ImageLinkForm  onInputChange={onInputChange} onSubmit={onSubmit}/>
             <FaceRecognition box={box} imgURLState={imgURL}/>
           </div>
         :( route === 'signin' 
-          ? <Signin onRouteChange={onRouteChange}/> 
-          : <Register onRouteChange={onRouteChange}/>
+          ? <Signin onRouteChange={onRouteChange} loadUser={loadUser}/> 
+          : <Register onRouteChange={onRouteChange} loadUser={loadUser}/>
         )
       }
     </div>
