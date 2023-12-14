@@ -84,9 +84,23 @@ function App() {
   const onSubmit = ()=>{
     imgURLState(input);
       fetch("https://api.clarifai.com/v2/models/face-detection/outputs", setupClarifaiRequest(input))
+        // .then(result=> console.log(result.outputs[0].data.regions.map()))
+        .then(result => {
+            if(result){      
+              fetch('http://localhost:3001/image', {
+                method: 'put',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    id: user.id
+              }
+            })
+          }
+          displayFaceBox(calculateFaceLocation(result))
+        })
         .then(result => result.json())
-        .then(result=> console.log(result.outputs[0].data.regions.map()))
-        .then(result => displayFaceBox(calculateFaceLocation(result)))
+        .then(count => {
+          userState(Object.assign(user, {entries: count}))
+        })
         .catch(error => console.log('error', error))
   }
 
