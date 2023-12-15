@@ -17,13 +17,13 @@ function App() {
   const [box,boxState]=useState({});
   const [route, routeState]=useState('signin');
   const [isSignedIn, isSignedInState]=useState(false);
-  const [user,userState]=useState({
-      id: '',
-      name: '',
-      email: '',
-      password: '',
-      entries: 0,
-      joined: ''
+  const [user, userState] = useState({
+    id: '',
+    name: '',
+    email: '',
+    password: '',
+    entries: 0,  
+    joined: ''
   })
 
 
@@ -81,27 +81,32 @@ function App() {
     inputState(event.target.value);
     
   }
-  const onSubmit = ()=>{
+  const onSubmit = () => {
     imgURLState(input);
-      fetch("https://api.clarifai.com/v2/models/face-detection/outputs", setupClarifaiRequest(input))
-        // .then(result=> console.log(result.outputs[0].data.regions.map()))
-        .then(result => {
-            if(result){      
-              fetch('http://localhost:3001/image', {
-                method: 'put',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    id: user.id
-              }
+    fetch("https://api.clarifai.com/v2/models/" + 'face-detection' + "/outputs", setupClarifaiRequest(input))
+      .then(result => result.json())
+      .then(response => {
+        displayFaceBox(calculateFaceLocation(response));
+        if (response) {
+          fetch('http://localhost:3001/image', {
+            method: 'put',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id: user.id
             })
-          }
-          displayFaceBox(calculateFaceLocation(result))
-        })
-        .then(result => result.json())
-        .then(count => {
-          userState(Object.assign(user, {entries: count}))
-        })
-        .catch(error => console.log('error', error))
+          })
+            .then(result => result.json())
+            .then(data => {
+              console.log('New entries count:', data.entries);
+              userState(prevState => ({
+                ...prevState,
+                entries: data.entries
+              }));
+            })
+            .catch(error => console.log('error', error));
+        }
+      })
+      .catch(error => console.log('error', error));
   }
 
   const onRouteChange = (routeChange)=>{
@@ -112,16 +117,16 @@ function App() {
     }
     routeState(routeChange);
   }
-  const loadUser=(data) =>{
-    userState({data:{ //in not working add ...user,
+  const loadUser = (data) => {
+    userState(prevState => ({
+      ...prevState,
       id: data.id,
       name: data.name,
       email: data.email,
-      password: data.password,
       entries: data.entries,
       joined: data.joined
-    }})
-  } 
+    }));
+  }
   // useEffect(()=>{
   //   fetch('http://localhost:3001/')
   //   .then(res => res.json())

@@ -16,22 +16,30 @@ class Signin extends Component {
     onPasswordChange=(event)=>{
         this.setState({signInPassword: event.target.value})
     }
-
     onSubmitSignIn = () => {
-        fetch('http://localhost:3001/signin',{
-            method: 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                email: this.state.signInEmail,
-                password: this.state.signInPassword
-            })
-        }).then(res => res.json())
+        fetch('http://localhost:3001/signin', {
+    method: 'post',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+        email: this.state.signInEmail,
+        password: this.state.signInPassword
+    })
+        })
+        .then(res => {
+            console.log(res)
+            return res.json();
+        })
         .then(data => {
-            if(data.id){
-                this.props.loadUser(data)
-                this.props.onRouteChange('home')
+            console.log('Data from server:', data);
+
+            if (data.id) {
+                this.props.loadUser(data);
+                this.props.onRouteChange('home');
             }
         })
+        .catch(error => {
+            console.log('There was a problem with the fetch operation:', error);
+        });
     }
     render(){
         const {onRouteChange}=this.props;
