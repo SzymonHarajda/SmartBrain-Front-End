@@ -22,7 +22,7 @@ function App() {
     name: '',
     email: '',
     password: '',
-    entries: 0,  
+    enrise: 0,  
     joined: ''
   })
 
@@ -97,10 +97,10 @@ function App() {
           })
             .then(result => result.json())
             .then(data => {
-              console.log('New entries count:', data.entries);
+              console.log('New enrise count:', data.enrise);
               userState(prevState => ({
                 ...prevState,
-                entries: data.entries
+                enrise: data.enrise
               }));
             })
             .catch(error => console.log('error', error));
@@ -118,12 +118,14 @@ function App() {
     routeState(routeChange);
   }
   const loadUser = (data) => {
+    console.log(data)
+    console.log(data.enrise)
     userState(prevState => ({
       ...prevState,
       id: data.id,
       name: data.name,
       email: data.email,
-      entries: data.entries,
+      enrise: data.enries,
       joined: data.joined
     }));
   }
@@ -141,7 +143,7 @@ function App() {
       { route === 'home' 
         ?  <div> 
             <Logo />
-            <Rank name = {user.name} entries={user.entries}/>
+            <Rank name = {user.name} enrise={user.enrise}/>
             <ImageLinkForm  onInputChange={onInputChange} onSubmit={onSubmit}/>
             <FaceRecognition box={box} imgURLState={imgURL}/>
           </div>
