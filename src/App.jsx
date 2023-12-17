@@ -32,7 +32,6 @@ function App() {
     const PAT = '7cbab129482f461a9eac2b56f8a6c73c';
     const USER_ID = 'wnammmq0x3moa';       
     const APP_ID = 'APIFun';
-    // const MODEL_ID='face-detection'
     const IMAGE_URL = imageURL;
 
     const raw = JSON.stringify({
@@ -86,7 +85,7 @@ function App() {
     
   }
   const onSubmit = () => {
-    imgURLState(input);
+    imgURLState(input+`?${Date.now()}`);
     fetch("https://api.clarifai.com/v2/models/" + 'face-detection' + "/outputs", setupClarifaiRequest(input))
       .then(result => result.json())
       .then(response => {
@@ -133,6 +132,8 @@ function App() {
       enries: data.enries,
       joined: data.joined
     }));
+    imgURLState('');
+    boxState([]);
   }
 
   
