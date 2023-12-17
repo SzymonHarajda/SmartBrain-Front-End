@@ -1,7 +1,7 @@
 import React from "react";
 
 
-const Rank = ({name,enrise})=>{
+const Rank = ({name,enries})=>{
     return(
         <div>
             <div className="white f3">
@@ -9,7 +9,7 @@ const Rank = ({name,enrise})=>{
                 {`${name}, your current entry count is ...`}
             </div>
             <div className="white f1">
-                {enrise}
+                {enries}
                 
             </div>
         </div>
