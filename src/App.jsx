@@ -27,41 +27,8 @@ function App() {
   })
 
 
-
-  const setupClarifaiRequest=(imageURL)=>{
-    const PAT = '7cbab129482f461a9eac2b56f8a6c73c';
-    const USER_ID = 'wnammmq0x3moa';       
-    const APP_ID = 'APIFun';
-    const IMAGE_URL = imageURL;
-
-    const raw = JSON.stringify({
-        "user_app_id": {
-            "user_id": USER_ID,
-            "app_id": APP_ID
-        },
-        "inputs": [
-            {
-                "data": {
-                    "image": {
-                        "url": IMAGE_URL
-                    }
-                }
-            }
-        ]
-    });
-
-    const requestOptions = {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Authorization': 'Key ' + PAT
-        },
-        body: raw
-    };
-    return requestOptions;
-  }
   const calculateFaceLocation=(datas)=>{
-    const clarifaiFace = datas.outputs[0].data.regions.map(face =>{
+      const clarifaiFace = datas.outputs[0].data.regions.map(face =>{
       const faceCoordinates = face.region_info.bounding_box;
 
     const image = document.getElementById('inputImage');
@@ -86,11 +53,20 @@ function App() {
   }
   const onSubmit = () => {
     imgURLState(input+`?${Date.now()}`);
-    fetch("https://api.clarifai.com/v2/models/" + 'face-detection' + "/outputs", setupClarifaiRequest(input))
+    fetch('http://localhost:3001/imageurl', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        imageURL: input,
+      }),
+    })    
       .then(result => result.json())
       .then(response => {
-        const numberOfFaces = response.outputs[0].data.regions.length;
-        displayFaceBox(calculateFaceLocation(response));
+        const clarifaiResponse = response.clarifaiResponse;
+        const numberOfFaces = clarifaiResponse.outputs[0].data.regions.length;
+        displayFaceBox(calculateFaceLocation(clarifaiResponse));
         if (response) {
           fetch('http://localhost:3001/image', {
             method: 'put',
