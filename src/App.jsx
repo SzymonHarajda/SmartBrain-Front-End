@@ -53,7 +53,7 @@ function App() {
   }
   const onSubmit = () => {
     imgURLState(input+`?${Date.now()}`);
-    fetch('http://localhost:3001/imageurl', {
+    fetch('https://thawing-lake-14451-a98e2227004a.herokuapp.com/imageurl', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -68,7 +68,7 @@ function App() {
         const numberOfFaces = clarifaiResponse.outputs[0].data.regions.length;
         displayFaceBox(calculateFaceLocation(clarifaiResponse));
         if (response) {
-          fetch('http://localhost:3001/image', {
+          fetch('https://thawing-lake-14451-a98e2227004a.herokuapp.com/image', {
             method: 'put',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
